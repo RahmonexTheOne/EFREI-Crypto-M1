@@ -6,6 +6,7 @@
 
 #define KEYSIZE 16  // 128 bits
 #define SECONDS_IN_24H 86400  // 24 hours in seconds
+#define SECONDS_IN_12H 43200  // 12 hours in seconds
 
 // Fonction pour convertir une chaîne hexadécimale en tableau d'octets
 void hex_to_bytes(const char *hex, unsigned char *bytes) {
@@ -27,6 +28,7 @@ int test_key(unsigned char *key, unsigned char *iv, unsigned char *plaintext, un
 }
 
 int main() {
+    // Les données fournies : plaintext, ciphertext et IV
     char plaintext_hex[] = "255044462d312e350a25d0d4c5d80a34";
     char ciphertext_hex[] = "d06bf9d0dab8e8ef880660d2af65aa82";
     char iv_hex[] = "09080706050403020100A2B2C2D2E2F2";
@@ -36,14 +38,14 @@ int main() {
     hex_to_bytes(ciphertext_hex, ciphertext);
     hex_to_bytes(iv_hex, iv);
 
-    // Timestamp de l'horodatage du fichier chiffré (2018-04-17 23:08:49)
+    // Timestamp de l'horodatage du fichier chiffré (2018-04-17 23:08:49 UTC)
     time_t file_time = 1524004129;  // 2018-04-17 23:08:49 en timestamp UNIX
 
     unsigned char key[KEYSIZE];
     int found = 0;
     
-    // Étendre la fenêtre de recherche à -24h et +24h (48 heures au total)
-    for (time_t t = file_time - SECONDS_IN_24H; t <= file_time + SECONDS_IN_24H; t++) {
+    // Étendre la fenêtre de recherche à -24h et +12h autour de l'horodatage du fichier
+    for (time_t t = file_time - SECONDS_IN_24H - SECONDS_IN_12H; t <= file_time + SECONDS_IN_12H; t++) {
         srand(t);
         
         // Générer la clé à partir de srand
