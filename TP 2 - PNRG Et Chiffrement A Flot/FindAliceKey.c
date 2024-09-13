@@ -5,7 +5,7 @@
 #include <time.h>
 
 #define KEYSIZE 16  // 128 bits
-#define SECONDS_IN_12H 43200  // 12 hours in seconds
+#define SECONDS_IN_24H 86400  // 24 hours in seconds
 
 // Fonction pour convertir une chaîne hexadécimale en tableau d'octets
 void hex_to_bytes(const char *hex, unsigned char *bytes) {
@@ -42,8 +42,8 @@ int main() {
     unsigned char key[KEYSIZE];
     int found = 0;
     
-    // Tester toutes les clés possibles dans une plage de -12h à +12h
-    for (time_t t = file_time - SECONDS_IN_12H; t <= file_time + SECONDS_IN_12H; t++) {
+    // Étendre la fenêtre de recherche à -24h et +24h (48 heures au total)
+    for (time_t t = file_time - SECONDS_IN_24H; t <= file_time + SECONDS_IN_24H; t++) {
         srand(t);
         
         // Générer la clé à partir de srand
