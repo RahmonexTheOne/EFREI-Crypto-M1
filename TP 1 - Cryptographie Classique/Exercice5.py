@@ -20,12 +20,13 @@ def charger_corpus(filepath):
         # Retourner une liste de mots sans les espaces
         return [mot.strip() for mot in fichier]
 
-# Trouver des paires de mots correspondant à un XOR donné
+# Trouver des paires de mots correspondant à un XOR donné et s'arrêter dès qu'une paire est trouvée
 def chercher_paires(xor_target, liste_mots):
     for mot_a, mot_b in itertools.combinations(liste_mots, 2):
         if len(mot_a) == len(mot_b) == len(xor_target):
             if xor_texts(mot_a, mot_b) == xor_target:
                 print(f"Correspondance trouvée : {mot_a}, {mot_b}")
+                return  # Arrêter la recherche après la première correspondance trouvée
 
 # Les textes chiffrés
 texte_chiffre1 = "HQQYAJT"
@@ -38,5 +39,5 @@ print(f"XOR des deux chiffrés : {xor_resultat}")
 # Charger le corpus depuis le fichier 'wordlist.txt'
 mots_corpus = charger_corpus('wordlist.txt')
 
-# Rechercher les paires correspondantes
+# Rechercher les paires correspondantes et s'arrêter dès qu'une correspondance est trouvée
 chercher_paires(xor_resultat, mots_corpus)
